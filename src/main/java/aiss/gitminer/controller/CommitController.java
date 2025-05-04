@@ -1,11 +1,13 @@
 package aiss.gitminer.controller;
 
+import aiss.gitminer.exception.CommitNotFoundException;
 import aiss.gitminer.model.Commit;
 import aiss.gitminer.repository.CommitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ public class CommitController {
     // POST: Crear un commit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Commit create(@RequestBody Commit commit) {
+    public Commit create(@Valid @RequestBody Commit commit) {
         return repository.save(commit);
     }
 
@@ -31,8 +33,12 @@ public class CommitController {
 
     // GET: Obtener un commit por ID
     @GetMapping("/{id}")
-    public Optional<Commit> findById(@PathVariable String id) {
-        return repository.findById(id);
+    public Commit findById(@PathVariable String id) throws CommitNotFoundException {
+        Optional<Commit> commit = repository.findById(id);
+        if(!commit.isPresent()){
+            throw new CommitNotFoundException();
+        }
+        return commit.get();
     }
 
     // DELETE: Eliminar un commit por ID

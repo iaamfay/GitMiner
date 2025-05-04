@@ -1,11 +1,13 @@
 package aiss.gitminer.controller;
 
+import aiss.gitminer.exception.ProjectNotFoundException;
 import aiss.gitminer.model.Project;
 import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +24,17 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Project> findById(@PathVariable String id) {return repository.findById(id);
+    public Project findById(@PathVariable String id) throws ProjectNotFoundException {
+        Optional<Project> project = repository.findById(id);
+        if(!project.isPresent()){
+            throw new ProjectNotFoundException();
+        }
+        return project.get();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Project create(@RequestBody Project project) {
+    public Project create(@Valid @RequestBody Project project) {
         return repository.save(project);
     }
 

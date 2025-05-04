@@ -1,11 +1,13 @@
 package aiss.gitminer.controller;
 
+import aiss.gitminer.exception.CommentNotFoundException;
 import aiss.gitminer.model.Comment;
 import aiss.gitminer.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ public class CommentController {
     // POST: Crear comentario
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Comment create(@RequestBody Comment comment) {
+    public Comment create(@Valid @RequestBody Comment comment) {
         return repository.save(comment);
     }
 
@@ -31,8 +33,12 @@ public class CommentController {
 
     // GET: Buscar por ID
     @GetMapping("/{id}")
-    public Optional<Comment> findById(@PathVariable String id) {
-        return repository.findById(id);
+    public Comment findById(@PathVariable String id) throws CommentNotFoundException {
+        Optional<Comment> comment = repository.findById(id);
+        if(!comment.isPresent()){
+            throw new CommentNotFoundException();
+        }
+        return comment.get();
     }
 
     // DELETE: Eliminar
