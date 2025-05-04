@@ -1,7 +1,7 @@
 package aiss.gitminer.controller;
 
 import aiss.gitminer.model.Project;
-import aiss.gitminer.service.ProjectService;
+import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,27 +14,26 @@ import java.util.Optional;
 public class ProjectController {
 
     @Autowired
-    ProjectService service;
+    ProjectRepository repository;
 
     @GetMapping
     public List<Project> findAll() {
-        return service.findAll();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Project> findById(@PathVariable String id) {
-        return service.findById(id);
+    public Optional<Project> findById(@PathVariable String id) {return repository.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Project create(@RequestBody Project project) {
-        return service.save(project);
+        return repository.save(project);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {
-        service.deleteById(id);
+        repository.deleteById(id);
     }
 }

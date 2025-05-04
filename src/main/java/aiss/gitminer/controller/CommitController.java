@@ -1,7 +1,7 @@
 package aiss.gitminer.controller;
 
 import aiss.gitminer.model.Commit;
-import aiss.gitminer.service.CommitService;
+import aiss.gitminer.repository.CommitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,31 +14,31 @@ import java.util.Optional;
 public class CommitController {
 
     @Autowired
-    private CommitService commitService;
+    CommitRepository repository;
 
     // POST: Crear un commit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Commit create(@RequestBody Commit commit) {
-        return commitService.save(commit);
+        return repository.save(commit);
     }
 
     // GET: Obtener todos los commits
     @GetMapping
     public List<Commit> findAll() {
-        return commitService.findAll();
+        return repository.findAll();
     }
 
     // GET: Obtener un commit por ID
     @GetMapping("/{id}")
     public Optional<Commit> findById(@PathVariable String id) {
-        return commitService.findById(id);
+        return repository.findById(id);
     }
 
     // DELETE: Eliminar un commit por ID
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {
-        commitService.deleteById(id);
+        repository.deleteById(id);
     }
 }
