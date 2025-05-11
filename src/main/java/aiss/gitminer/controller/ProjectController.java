@@ -38,6 +38,23 @@ public class ProjectController {
         return repository.save(project);
     }
 
+    @PutMapping("/{id}")
+    public Project update(@PathVariable String id, @Valid @RequestBody Project updatedProject) throws ProjectNotFoundException {
+        Optional<Project> existing = repository.findById(id);
+        if (!existing.isPresent()) {
+            throw new ProjectNotFoundException();
+        }
+
+        Project project = existing.get();
+        project.setName(updatedProject.getName());
+        project.setWebUrl(updatedProject.getWebUrl());
+        project.setCommits(updatedProject.getCommits());
+        project.setIssues(updatedProject.getIssues());
+
+        return repository.save(project);
+    }
+
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {

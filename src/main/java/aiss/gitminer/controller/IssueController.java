@@ -49,6 +49,30 @@ public class IssueController {
         return issue.get();
     }
 
+    @PutMapping("/{id}")
+    public Issue update(@PathVariable String id, @Valid @RequestBody Issue updatedIssue) throws IssueNotFoundException {
+        Optional<Issue> existing = repository.findById(id);
+        if (!existing.isPresent()) {
+            throw new IssueNotFoundException();
+        }
+
+        Issue issue = existing.get();
+        issue.setTitle(updatedIssue.getTitle());
+        issue.setDescription(updatedIssue.getDescription());
+        issue.setState(updatedIssue.getState());
+        issue.setCreatedAt(updatedIssue.getCreatedAt());
+        issue.setUpdatedAt(updatedIssue.getUpdatedAt());
+        issue.setClosedAt(updatedIssue.getClosedAt());
+        issue.setLabels(updatedIssue.getLabels());
+        issue.setAuthor(updatedIssue.getAuthor());
+        issue.setAssignee(updatedIssue.getAssignee());
+        issue.setVotes(updatedIssue.getVotes());
+        issue.setComments(updatedIssue.getComments());
+
+        return repository.save(issue);
+    }
+
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {

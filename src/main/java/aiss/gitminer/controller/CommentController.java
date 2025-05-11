@@ -41,6 +41,25 @@ public class CommentController {
         return comment.get();
     }
 
+    // PUT: Actualizar un comentario existente
+    @PutMapping("/{id}")
+    public Comment update(@PathVariable String id, @Valid @RequestBody Comment updatedComment) throws CommentNotFoundException {
+        Optional<Comment> existingComment = repository.findById(id);
+        if (!existingComment.isPresent()) {
+            throw new CommentNotFoundException();
+        }
+
+        Comment comment = existingComment.get();
+
+        comment.setBody(updatedComment.getBody());
+        comment.setAuthor(updatedComment.getAuthor());
+        comment.setCreatedAt(updatedComment.getCreatedAt()); // Aunque no siempre se actualiza este campo
+        comment.setUpdatedAt(updatedComment.getUpdatedAt());
+
+        return repository.save(comment);
+    }
+
+
     // DELETE: Eliminar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

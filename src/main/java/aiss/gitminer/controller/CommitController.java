@@ -41,6 +41,25 @@ public class CommitController {
         return commit.get();
     }
 
+    @PutMapping("/{id}")
+    public Commit update(@PathVariable String id, @Valid @RequestBody Commit updatedCommit) throws CommitNotFoundException {
+        Optional<Commit> existing = repository.findById(id);
+        if (!existing.isPresent()) {
+            throw new CommitNotFoundException();
+        }
+
+        Commit commit = existing.get();
+        commit.setTitle(updatedCommit.getTitle());
+        commit.setMessage(updatedCommit.getMessage());
+        commit.setAuthorName(updatedCommit.getAuthorName());
+        commit.setAuthorEmail(updatedCommit.getAuthorEmail());
+        commit.setAuthoredDate(updatedCommit.getAuthoredDate());
+        commit.setWebUrl(updatedCommit.getWebUrl());
+
+        return repository.save(commit);
+    }
+
+
     // DELETE: Eliminar un commit por ID
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
