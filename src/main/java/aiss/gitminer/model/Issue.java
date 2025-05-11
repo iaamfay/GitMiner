@@ -4,8 +4,10 @@ package aiss.gitminer.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.Generated;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -15,53 +17,38 @@ public class Issue {
     @Id
     @JsonProperty("id")
     private String id;
-
     @JsonProperty("title")
     private String title;
-
     @JsonProperty("description")
     @Column(columnDefinition="TEXT")
     private String description;
-
     @JsonProperty("state")
     private String state;
 
     @JsonProperty("created_at")
     private String createdAt;
-
     @JsonProperty("updated_at")
     private String updatedAt;
-
     @JsonProperty("closed_at")
     private String closedAt;
-
     @JsonProperty("labels")
     @ElementCollection
     private List<String> labels;
-
     @JsonProperty("author")
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.ALL)
+    //@NotEmpty(message = "The author of the issue cannot be empty")
+    @JoinColumn(name = "author_id",referencedColumnName = "id")
+    @OneToOne(cascade=CascadeType.ALL)
     private User author;
-
     @JsonProperty("assignee")
-    @JoinColumn(name = "assignee_id", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "assignee_id",referencedColumnName = "id")
+    @OneToOne(cascade=CascadeType.ALL)
     private User assignee;
-
     @JsonProperty("votes")
     private Integer votes;
-
     @JsonProperty("comments")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
     private List<Comment> comments;
-
-    @Transient
-    @JsonProperty("ref_id")
-    private String refId = "1150"; // forzado
-
-    // Getters and setters
 
     public String getId() {
         return id;
@@ -159,40 +146,67 @@ public class Issue {
         this.comments = comments;
     }
 
-    @JsonProperty("ref_id")
-    public String getRefId() {
-        return refId;
-    }
-
-    @JsonProperty("ref_id")
-    public void setRefId(String refId) {
-        this.refId = refId;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Issue.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("id=").append(id).append(',');
-        sb.append("title=").append(title).append(',');
-        sb.append("description=").append(description).append(',');
-        sb.append("state=").append(state).append(',');
-        sb.append("createdAt=").append(createdAt).append(',');
-        sb.append("updatedAt=").append(updatedAt).append(',');
-        sb.append("closedAt=").append(closedAt).append(',');
-        sb.append("labels=").append(labels).append(',');
-        sb.append("author=").append(author).append(',');
-        sb.append("assignee=").append(assignee).append(',');
-        sb.append("votes=").append(votes).append(',');
-        sb.append("comments=").append(comments).append(',');
-        sb.append("refId=").append(refId).append(',');
+        sb.append("id");
+        sb.append('=');
+        sb.append(((this.id == null) ? "<null>" : this.id));
+        sb.append(',');
+        sb.append("title");
+        sb.append('=');
+        sb.append(((this.title == null) ? "<null>" : this.title));
+        sb.append(',');
+        sb.append("description");
+        sb.append('=');
+        sb.append(((this.description == null) ? "<null>" : this.description));
+        sb.append(',');
+        sb.append("state");
+        sb.append('=');
+        sb.append(((this.state == null) ? "<null>" : this.state));
+        sb.append(',');
+        sb.append("createdAt");
+        sb.append('=');
+        sb.append(((this.createdAt == null) ? "<null>" : this.createdAt));
+        sb.append(',');
+        sb.append("updatedAt");
+        sb.append('=');
+        sb.append(((this.updatedAt == null) ? "<null>" : this.updatedAt));
+        sb.append(',');
+        sb.append("closedAt");
+        sb.append('=');
+        sb.append(((this.closedAt == null) ? "<null>" : this.closedAt));
+        sb.append(',');
+        sb.append("labels");
+        sb.append('=');
+        sb.append(((this.labels == null) ? "<null>" : this.labels));
+        sb.append(',');
+        sb.append("author");
+        sb.append('=');
+        sb.append(((this.author == null) ? "<null>" : this.author));
+        sb.append(',');
+        sb.append("assignee");
+        sb.append('=');
+        sb.append(((this.assignee == null) ? "<null>" : this.assignee));
+        sb.append(',');
+        sb.append("votes");
+        sb.append('=');
+        sb.append(((this.votes == null) ? "<null>" : this.votes));
+        sb.append(',');
+        sb.append("comments");
+        sb.append('=');
+        sb.append(((this.comments == null) ? "<null>" : this.comments));
+        sb.append(',');
 
-        if (sb.charAt(sb.length() - 1) == ',') {
-            sb.setCharAt(sb.length() - 1, ']');
+        if (sb.charAt((sb.length() - 1)) == ',') {
+            sb.setCharAt((sb.length() - 1), ']');
         } else {
             sb.append(']');
         }
-
         return sb.toString();
     }
+
+
+
 }
